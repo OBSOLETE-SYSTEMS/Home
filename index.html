@@ -4114,6 +4114,39 @@ a:hover { text-decoration: underline; }
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ============================================================
+   PHASE CARD AS LINK (for ENCODE → /encode page)
+   ============================================================ */
+.phase-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.phase-card-link:hover {
+  background: #1a1a1a;
+  text-decoration: none;
+}
+
+.phase-card-link:hover .phase-link-arrow {
+  transform: translate(2px, -2px);
+  color: var(--neon-cyan);
+}
+
+.phase-link-arrow {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 0.6em;
+  color: var(--text-meta);
+  font-weight: 400;
+  transition: transform 0.2s ease, color 0.2s ease;
+  vertical-align: middle;
+}
 </style>
 </head>
 <body>
@@ -4439,23 +4472,45 @@ function HowItWorks() {
 
         <div className="system-grid">
           <div className="phase-nav">
-            {PHASES.map((p) => (
-              <button
-                key={p.id}
-                className={`phase-card${phaseId === p.id ? ' active' : ''}`}
-                data-phase={p.id}
-                onClick={() => setPhaseId(p.id)}
-              >
-                <div className="phase-number">{p.num} / PHASE</div>
-                <div className="phase-label">{p.label}</div>
-                <div className="phase-desc">{p.desc}</div>
-                <div className="phase-meta">
-                  <span className={`phase-status-tag ${p.statusClass}`}>
-                    <span className="dot"></span>{p.status}
-                  </span>
-                </div>
-              </button>
-            ))}
+            {PHASES.map((p) => {
+              const inner = (
+                <>
+                  <div className="phase-number">{p.num} / PHASE</div>
+                  <div className="phase-label">
+                    {p.label}
+                    {p.id === 'encode' && <span className="phase-link-arrow">&#8599;</span>}
+                  </div>
+                  <div className="phase-desc">{p.desc}</div>
+                  <div className="phase-meta">
+                    <span className={`phase-status-tag ${p.statusClass}`}>
+                      <span className="dot"></span>{p.status}
+                    </span>
+                  </div>
+                </>
+              );
+              if (p.id === 'encode') {
+                return (
+                  <a
+                    key={p.id}
+                    href="/encode"
+                    className="phase-card phase-card-link"
+                    data-phase={p.id}
+                  >
+                    {inner}
+                  </a>
+                );
+              }
+              return (
+                <button
+                  key={p.id}
+                  className={`phase-card${phaseId === p.id ? ' active' : ''}`}
+                  data-phase={p.id}
+                  onClick={() => setPhaseId(p.id)}
+                >
+                  {inner}
+                </button>
+              );
+            })}
           </div>
 
           <div className="terminal">
