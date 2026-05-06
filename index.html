@@ -5177,7 +5177,9 @@ function Diagnostic({ reconStarter }) {
   const [step, setStep] = useState(0);
   const [data, setData] = useState({ category: '', brand: '', differentiator: '', competitors: '', bottleneck: '' });
   const [procLines, setProcLines] = useState([]);
-  const [showOutput, setShowOutput] = useState(false);
+  const [showOutput, setShowOutput] = useState(false);                                     
+    const [apiResult, setApiResult] = useState(null);                                        
+    const [apiError, setApiError] = useState(null);
 
   // React to hero's recon starter — pre-fill category and advance to step 1
   useEffect(() => {
@@ -5198,9 +5200,29 @@ function Diagnostic({ reconStarter }) {
     return true;
   };
 
-  const startProcessing = () => {
-    setStep(2);
-    setProcLines([]);
+  const startProcessing = () => {                    
+      setStep(2);                                                                            
+      setApiResult(null);                                                                
+      setApiError(null);                                                                     
+                                                                                             
+      // Kick off the real Claude API call in parallel with the animation.
+      fetch('/api/recon', {                                                                  
+        method: 'POST',                                                                  
+        headers: { 'content-type': 'application/json' },       
+        body: JSON.stringify({                          
+          category: data.category,                  
+          brand: data.brand,                                                                 
+          differentiator: data.differentiator,         
+          competitors: data.competitors,                                                     
+          bottleneck: data.bottleneck,                                                   
+        }),                                         
+      })                                                                                     
+        .then((r) => r.ok ? r.json() : r.json().then((j) => Promise.reject(j)))
+        .then((result) => setApiResult(result))                                              
+        .catch((err) => {                                                                
+          console.error('Recon API error:', err);   
+          setApiError(err);                         
+        });
     const bottleneckLabel = BOTTLENECKS.find(b => b.id === data.bottleneck)?.label.toLowerCase() || 'your bottleneck';
     const deptRouting = DEPARTMENT_MAP[data.bottleneck];
     const primary = deptRouting?.primary || 'BRAND INTELLIGENCE';
@@ -5254,15 +5276,18 @@ function Diagnostic({ reconStarter }) {
     }, afterAgentsDelay + 10000);
   };
 
-  const reset = () => {
-    setStep(0);
-    setData({ category: '', brand: '', differentiator: '', competitors: '', bottleneck: '' });
-    setProcLines([]);
-    setShowOutput(false);
-  };
+ const reset = () => {                                                                
+      setStep(0);                                                                            
+      setData({ category: '', brand: '', differentiator: '', competitors: '', bottleneck: ''
+  });                                                                                        
+      setProcLines([]);                                                                  
+      setShowOutput(false);                         
+      setApiResult(null);                                                                    
+      setApiError(null);                        
+    };          
 
   const bottleneckObj = BOTTLENECKS.find(b => b.id === data.bottleneck) || BOTTLENECKS[0];
-  const output = RECON_OUTPUTS[data.bottleneck] || RECON_OUTPUTS.awareness;
+  const output = apiResult || RECON_OUTPUTS[data.bottleneck] || RECON_OUTPUTS.awareness;
 
   const statusText = step === 0 ? 'AWAITING INPUT' : step === 1 ? 'STEP 2 OF 2' : step === 2 ? 'PROCESSING...' : 'COMPLETE';
   const statusColor = step === 3 ? 'var(--neon-green)' : step === 2 ? 'var(--neon-yellow)' : 'var(--text-meta)';
