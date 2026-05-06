@@ -4147,6 +4147,50 @@ a:hover { text-decoration: underline; }
   transition: transform 0.2s ease, color 0.2s ease;
   vertical-align: middle;
 }
+
+/* ============================================================
+   PRINCIPLE PASS — strategist voice + leverage line
+   ============================================================ */
+.recon-footer-strong {
+  color: var(--neon-yellow);
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.dept-leverage-line {
+  margin-top: 12px;
+  padding: 22px 28px;
+  border: 1px solid var(--neon-yellow);
+  background: rgba(232, 255, 0, 0.03);
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.4vw, 28px);
+  letter-spacing: 0.04em;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  line-height: 1.1;
+}
+
+.dept-leverage-marker {
+  color: var(--neon-yellow);
+  font-size: 1em;
+  flex-shrink: 0;
+}
+
+.dept-leverage-strong {
+  color: var(--neon-yellow);
+}
+
+@media (max-width: 600px) {
+  .dept-leverage-line {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 18px 20px;
+  }
+}
 </style>
 </head>
 <body>
@@ -4746,6 +4790,10 @@ function Departments() {
           Every department is fully customizable and mapped to your business.
           <span className="dept-customize-end">Built once. Tuned forever.</span>
         </div>
+        <div className="dept-leverage-line">
+          <span className="dept-leverage-marker">&rarr;</span>
+          Six departments. <span className="dept-leverage-strong">One operator: you.</span>
+        </div>
       </div>
     </section>
   );
@@ -4760,12 +4808,12 @@ function Difference() {
     {
       old: 'You get a tool with a dashboard to manage.',
       principle: 'DEPARTMENTS, NOT TOOLS',
-      new: 'A functioning team that runs itself. Not a feature you operate.',
+      new: 'A team that drafts the work, watches the signals, and reports up. You stay the operator.',
     },
     {
       old: '"We already use AI."',
       principle: 'ENGINES OVER PROMPTS',
-      new: 'OBSOLETE is the team of AI agents that runs your marketing \u2014 encoded on your brand, delivering weekly output.',
+      new: 'OBSOLETE installs the operating model that turns the AI you already pay for into briefs, intel, and weekly output \u2014 encoded on your brand, delivered to you.',
     },
     {
       old: 'AI tools output summaries. You still have to figure out what to do.',
@@ -4778,9 +4826,9 @@ function Difference() {
       new: 'You own the infrastructure. Fixed retainer \u2014 every week the system compounds, not the bill.',
     },
     {
-      old: 'Platforms give you a login and say "figure it out."',
-      principle: 'BESPOKE + SELF-DRIVING',
-      new: 'We build bespoke departments per brand, then hand over the keys. Nothing to learn.',
+      old: 'Hire a marketer per discipline. Hire a team for five disciplines. Either way, six figures.',
+      principle: '1 OPERATOR, 5 SPECIALTIES',
+      new: 'Six departments running for one operator \u2014 at least three of which you have no technical skill in. That\u2019s the leverage.',
     },
     {
       old: 'Most AI marketing produces synthetic, generic output.',
@@ -5318,7 +5366,7 @@ function BriefCard({ brief, idx }) {
       )}
 
       <div className="recon-brief-why">
-        <span className="recon-brief-why-label">&rarr; WHY THIS NOW</span>
+        <span className="recon-brief-why-label">&rarr; THE MOVE</span>
         <span className="recon-brief-why-text">{brief.why}</span>
       </div>
 
@@ -5536,9 +5584,9 @@ function ReconOutput({ data, bottlenecks, output, deptRouting }) {
       </div>
 
       <div className="recon-footer">
-        {briefCount} briefs across {deptList.length || 1} department{deptList.length !== 1 ? 's' : ''}.
+        <span className="recon-footer-strong">Approve. Edit. Kill.</span> Your call.
         The full engine ships 12&ndash;15 briefs every week across 6 departments &mdash;
-        in {brand}&rsquo;s voice, on {brand}&rsquo;s cadence.
+        in {brand}&rsquo;s voice, run by {brand}&rsquo;s team.
       </div>
     </div>
   );
