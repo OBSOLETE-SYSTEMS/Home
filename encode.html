@@ -867,6 +867,85 @@ main {
   .sections-grid, .uploads-list { break-inside: avoid; }
   .sc, .ul-row { break-inside: avoid; }
 }
+
+/* ============================================================
+   PRINCIPLE BAND
+   ============================================================ */
+.principle-band-block {
+  padding-top: 0 !important;
+}
+
+.principle-band {
+  border: 1px solid var(--border, #2a2a2a);
+  background: var(--card, #151515);
+  padding: 32px 36px;
+  position: relative;
+}
+
+.principle-band::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--neon-yellow, #e8ff00), transparent 70%);
+}
+
+.principle-band-eyebrow {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--neon-yellow, #e8ff00);
+  margin-bottom: 22px;
+}
+
+.principle-band-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.principle-band-line {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 16px;
+  align-items: baseline;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border-light, #333);
+}
+
+.principle-band-line:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.principle-band-line .pb-num {
+  font-family: var(--font-display, 'Bebas Neue', sans-serif);
+  font-size: 22px;
+  color: var(--text-meta, #5a5652);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.principle-band-line .pb-text {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--text, #e8e4df);
+  font-weight: 300;
+}
+
+.principle-band-line .pb-text strong {
+  color: var(--white, #f0ece6);
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .principle-band { padding: 24px 22px; }
+  .principle-band-line { grid-template-columns: 28px 1fr; gap: 12px; }
+  .principle-band-line .pb-num { font-size: 19px; }
+}
 </style>
 </head>
 <body>
@@ -901,6 +980,20 @@ main {
       <div class="pull-quote">
         <p class="pq-body">The Encode is a structured interview designed to capture the things we can't learn from your website &mdash; your <span class="pq-cyan">voice</span>, your <span class="pq-green">authority</span>, your <span class="pq-violet">anti-patterns</span>.</p>
         <span class="pq-punch"><span class="pq-marker">&#9656;</span> The stuff only you know.<span class="pq-cursor">_</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PRINCIPLE BAND ==================== -->
+  <section class="block principle-band-block">
+    <div class="wrap">
+      <div class="principle-band">
+        <div class="principle-band-eyebrow">// HOW THIS WORKS</div>
+        <div class="principle-band-stack">
+          <div class="principle-band-line"><span class="pb-num">01</span><span class="pb-text"><strong>You speak.</strong> The engine never invents your brand.</span></div>
+          <div class="principle-band-line"><span class="pb-num">02</span><span class="pb-text"><strong>The engine learns.</strong> What you say becomes how it ships.</span></div>
+          <div class="principle-band-line"><span class="pb-num">03</span><span class="pb-text"><strong>You stay the operator.</strong> Approve, edit, or kill — every week.</span></div>
+        </div>
       </div>
     </div>
   </section>
