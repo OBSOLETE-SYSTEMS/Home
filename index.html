@@ -5200,10 +5200,11 @@ function Diagnostic({ reconStarter }) {
     return true;
   };
 
-  const startProcessing = () => {                    
-      setStep(2);                                                                            
-      setApiResult(null);                                                                
-      setApiError(null);                                                                     
+  const startProcessing = () => {                                                      
+        setStep(2);
+        setProcLines([]);                                                                    
+        setApiResult(null);                         
+        setApiError(null);                                                                     
                                                                                              
       // Kick off the real Claude API call in parallel with the animation.
       fetch('/api/recon', {                                                                  
