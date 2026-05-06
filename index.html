@@ -3821,6 +3821,299 @@ a:hover { text-decoration: underline; }
   font-weight: 300;
   font-size: 13.5px;
 }
+
+/* ============================================================
+   MULTI-BOTTLENECK CHIP UI
+   ============================================================ */
+.diag-input-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.diag-chip-counter {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  color: var(--text-meta);
+  padding: 3px 8px;
+  border: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.02);
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+
+.diag-chip-counter.full {
+  color: var(--neon-yellow);
+  border-color: var(--neon-yellow);
+  background: rgba(232, 255, 0, 0.06);
+}
+
+.diag-chip.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.diag-chip.disabled:hover {
+  color: var(--text);
+  border-color: var(--text-meta);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ============================================================
+   RECON OUTPUT — REDESIGN
+   Header eyebrow, bottleneck tags, demoted routing, THE READ
+   ============================================================ */
+
+/* New header */
+.recon-head-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--neon-green);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.recon-head-eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--neon-green);
+  box-shadow: 0 0 8px var(--neon-green);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.recon-head-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4.6vw, 56px);
+  color: var(--white);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.recon-head-bottlenecks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.recon-head-bottleneck-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border: 1px solid;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.recon-head-bottleneck-tag .tag-dot {
+  width: 6px;
+  height: 6px;
+}
+
+/* Demoted routing line */
+.recon-routing-line {
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.recon-routing-marker {
+  color: var(--neon-yellow);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.recon-routing-text strong {
+  color: var(--white);
+  font-weight: 500;
+}
+
+.recon-routing-meta {
+  color: var(--text-meta);
+}
+
+/* THE READ — compressed intel */
+.recon-read {
+  padding: 28px 24px 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+
+.recon-read-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--neon-yellow);
+  margin-bottom: 18px;
+}
+
+.recon-read-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.recon-read-line {
+  display: grid;
+  grid-template-columns: 80px 90px 1fr;
+  gap: 16px;
+  align-items: baseline;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.recon-read-line:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.recon-read-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.recon-read-label.cyan { color: var(--neon-cyan); }
+.recon-read-label.pink { color: var(--neon-pink); }
+.recon-read-label.green { color: var(--neon-green); }
+
+.recon-read-tag {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--white);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.recon-read-text {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--text);
+  font-weight: 300;
+}
+
+@media (max-width: 700px) {
+  .recon-read-line {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+/* ============================================================
+   BRIEF CARD — REDESIGN
+   Headline mode by default, expand to reveal details
+   ============================================================ */
+
+.recon-brief-headline-hook {
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--neon-yellow);
+  line-height: 1.5;
+  margin: 0 0 18px;
+  padding: 0 0 0 14px;
+  border-left: 2px solid var(--neon-yellow);
+  letter-spacing: 0.005em;
+}
+
+.recon-brief .recon-brief-why {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding-top: 0;
+  border-top: none;
+}
+
+.recon-brief .recon-brief-why-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--neon-green);
+  flex-shrink: 0;
+  padding-top: 2px;
+  text-transform: uppercase;
+}
+
+.recon-brief .recon-brief-why-text {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text);
+  font-weight: 300;
+  font-style: normal;
+}
+
+.recon-brief-toggle {
+  margin-top: 4px;
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--border-light);
+  color: var(--text-dim);
+  padding: 11px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s;
+}
+
+.recon-brief-toggle:hover {
+  color: var(--neon-yellow);
+  border-color: var(--neon-yellow);
+  background: rgba(232, 255, 0, 0.03);
+}
+
+.recon-brief-toggle-icon {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.recon-brief.expanded .recon-brief-toggle {
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.recon-brief-details {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  animation: brief-expand 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes brief-expand {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 <body>
@@ -4925,147 +5218,195 @@ const BRIEF_TYPE_META = {
   positioning: { label: 'POSITIONING DOC',    accent: 'green'  },
 };
 
+function extractHook(brief) {
+  if (brief.rows && Array.isArray(brief.rows)) {
+    const hookRow = brief.rows.find(r => r.hl);
+    if (hookRow) return hookRow.v;
+  }
+  if (brief.briefType === 'hybrid' && brief.creative && brief.creative.hook) {
+    return brief.creative.hook;
+  }
+  if (brief.briefType === 'positioning' && brief.thesis) {
+    return brief.thesis;
+  }
+  if (brief.briefType === 'lifecycle' && brief.sequence && brief.sequence[0]) {
+    return brief.sequence[0].hook;
+  }
+  if (brief.briefType === 'strategy' && brief.cadence) {
+    return brief.cadence;
+  }
+  return null;
+}
+
 function BriefCard({ brief, idx }) {
+  const [expanded, setExpanded] = useState(false);
   const meta = BRIEF_TYPE_META[brief.briefType] || { label: 'BRIEF', accent: 'pink' };
+  const hook = extractHook(brief);
+  const detailRows = (brief.rows || []).filter(r => !r.hl);
 
   return (
-    <div className={`recon-brief type-${brief.briefType}`} data-accent={meta.accent}>
+    <div className={`recon-brief type-${brief.briefType}${expanded ? ' expanded' : ''}`} data-accent={meta.accent}>
+      {/* Headline view — always visible */}
       <div className="recon-brief-head">
         <div className="recon-brief-id">
           <span className="recon-brief-num">{brief.id}</span>
           <span className={`recon-brief-typebadge accent-${meta.accent}`}>{meta.label}</span>
-          <span className="recon-brief-subtype">{brief.type}</span>
         </div>
-        <div className="recon-brief-urgency">{brief.urgency}</div>
       </div>
 
       <div className="recon-brief-title">{brief.title}</div>
 
-      <div className="recon-brief-meta">
-        <span className="recon-brief-meta-k">PLATFORM</span>
-        <span className="recon-brief-meta-v">{brief.platform}</span>
-      </div>
-
-      {/* STRATEGY DOC layout */}
-      {brief.briefType === 'strategy' && (
-        <>
-          <div className="recon-pillar-grid">
-            {brief.pillars.map((p, i) => (
-              <div className="recon-pillar" key={i}>
-                <span className="recon-pillar-num">{p.num}</span>
-                <div>
-                  <div className="recon-pillar-name">{p.name}</div>
-                  <div className="recon-pillar-desc">{p.desc}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="recon-mix">
-            {brief.mix.map((m, i) => (
-              <div className="recon-mix-item" key={i}>
-                <div className="recon-mix-pct">{m.pct}</div>
-                <div className="recon-mix-label">{m.label}</div>
-                <div className="recon-mix-note">{m.note}</div>
-              </div>
-            ))}
-          </div>
-          <div className="recon-brief-row" style={{ marginTop: 14 }}>
-            <span className="recon-brief-k">Cadence</span>
-            <span className="recon-brief-v">{brief.cadence}</span>
-          </div>
-        </>
-      )}
-
-      {/* POSITIONING DOC layout */}
-      {brief.briefType === 'positioning' && (
-        <>
-          <div className="recon-thesis">
-            <span className="recon-thesis-label">THESIS</span>
-            <div className="recon-thesis-text">{brief.thesis}</div>
-          </div>
-          <div className="recon-angles">
-            {brief.angles.map((a, i) => (
-              <div className="recon-angle" key={i}>
-                <div className="recon-angle-head">
-                  <span className="recon-angle-num">{a.num}</span>
-                  <span className="recon-angle-name">{a.name}</span>
-                </div>
-                <div className="recon-angle-claim">{a.claim}</div>
-                <div className="recon-angle-proof">{a.proof}</div>
-              </div>
-            ))}
-          </div>
-          <div className="recon-brief-row" style={{ marginTop: 14 }}>
-            <span className="recon-brief-k">Activation</span>
-            <span className="recon-brief-v hl">{brief.activation}</span>
-          </div>
-        </>
-      )}
-
-      {/* HYBRID (creative + media) layout */}
-      {brief.briefType === 'hybrid' && (
-        <>
-          <div className="recon-hybrid-grid">
-            <div className="recon-hybrid-col">
-              <div className="recon-hybrid-head accent-pink">&#9656; CREATIVE</div>
-              <div className="recon-hybrid-row"><span className="hk">Concept</span><span className="hv">{brief.creative.concept}</span></div>
-              <div className="recon-hybrid-row"><span className="hk">Hook</span><span className="hv hl">{brief.creative.hook}</span></div>
-              <div className="recon-hybrid-row"><span className="hk">Visual</span><span className="hv">{brief.creative.visual}</span></div>
-            </div>
-            <div className="recon-hybrid-col">
-              <div className="recon-hybrid-head accent-violet">&#9656; MEDIA</div>
-              <div className="recon-hybrid-row"><span className="hk">Audience</span><span className="hv">{brief.media.audience}</span></div>
-              <div className="recon-hybrid-row"><span className="hk">Budget</span><span className="hv">{brief.media.budget}</span></div>
-              <div className="recon-hybrid-row"><span className="hk">Runtime</span><span className="hv">{brief.media.runtime}</span></div>
-              <div className="recon-hybrid-row"><span className="hk">Target KPI</span><span className="hv hl">{brief.media.kpi}</span></div>
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* LIFECYCLE layout */}
-      {brief.briefType === 'lifecycle' && (
-        <>
-          <div className="recon-brief-rows">
-            <div className="recon-brief-row"><span className="recon-brief-k">Trigger</span><span className="recon-brief-v">{brief.trigger}</span></div>
-            <div className="recon-brief-row"><span className="recon-brief-k">Segment</span><span className="recon-brief-v">{brief.segment}</span></div>
-            <div className="recon-brief-row"><span className="recon-brief-k">Tone</span><span className="recon-brief-v">{brief.tone}</span></div>
-          </div>
-          <div className="recon-sequence">
-            <div className="recon-sequence-label">SEQUENCE</div>
-            {brief.sequence.map((s, i) => (
-              <div className="recon-seq-step" key={i}>
-                <div className="recon-seq-day">{s.day}</div>
-                <div className="recon-seq-content">
-                  <div className="recon-seq-hook">{s.hook}</div>
-                  <div className="recon-seq-purpose">{s.purpose}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="recon-brief-row" style={{ marginTop: 14 }}>
-            <span className="recon-brief-k">KPI</span>
-            <span className="recon-brief-v hl">{brief.kpi}</span>
-          </div>
-        </>
-      )}
-
-      {/* Default k/v rows for content / media / pr */}
-      {(brief.briefType === 'content' || brief.briefType === 'media' || brief.briefType === 'pr') && (
-        <div className="recon-brief-rows">
-          {brief.rows.map((row, j) => (
-            <div className="recon-brief-row" key={j}>
-              <span className="recon-brief-k">{row.k}</span>
-              <span className={`recon-brief-v${row.hl ? ' hl' : ''}`}>{row.v}</span>
-            </div>
-          ))}
+      {hook && (
+        <div className="recon-brief-headline-hook">
+          {hook}
         </div>
       )}
 
       <div className="recon-brief-why">
-        <span className="recon-brief-why-label">WHY</span>
+        <span className="recon-brief-why-label">&rarr; WHY THIS NOW</span>
         <span className="recon-brief-why-text">{brief.why}</span>
       </div>
+
+      {/* Expand toggle */}
+      <button
+        className="recon-brief-toggle"
+        onClick={() => setExpanded(!expanded)}
+        aria-expanded={expanded}
+      >
+        <span className="recon-brief-toggle-icon">{expanded ? '−' : '+'}</span>
+        {expanded ? 'Collapse execution details' : 'See execution details'}
+      </button>
+
+      {/* Details — visible only when expanded */}
+      {expanded && (
+        <div className="recon-brief-details">
+          <div className="recon-brief-meta">
+            <span className="recon-brief-meta-k">PLATFORM</span>
+            <span className="recon-brief-meta-v">{brief.platform}</span>
+          </div>
+          {brief.type && (
+            <div className="recon-brief-meta">
+              <span className="recon-brief-meta-k">FORMAT</span>
+              <span className="recon-brief-meta-v">{brief.type}</span>
+            </div>
+          )}
+
+          {brief.briefType === 'strategy' && brief.pillars && (
+            <>
+              <div className="recon-pillar-grid">
+                {brief.pillars.map((p, i) => (
+                  <div className="recon-pillar" key={i}>
+                    <span className="recon-pillar-num">{p.num}</span>
+                    <div>
+                      <div className="recon-pillar-name">{p.name}</div>
+                      <div className="recon-pillar-desc">{p.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {brief.mix && (
+                <div className="recon-mix">
+                  {brief.mix.map((m, i) => (
+                    <div className="recon-mix-item" key={i}>
+                      <div className="recon-mix-pct">{m.pct}</div>
+                      <div className="recon-mix-label">{m.label}</div>
+                      <div className="recon-mix-note">{m.note}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {brief.cadence && (
+                <div className="recon-brief-row" style={{ marginTop: 14 }}>
+                  <span className="recon-brief-k">Cadence</span>
+                  <span className="recon-brief-v">{brief.cadence}</span>
+                </div>
+              )}
+            </>
+          )}
+
+          {brief.briefType === 'positioning' && brief.angles && (
+            <>
+              <div className="recon-angles">
+                {brief.angles.map((a, i) => (
+                  <div className="recon-angle" key={i}>
+                    <div className="recon-angle-head">
+                      <span className="recon-angle-num">{a.num}</span>
+                      <span className="recon-angle-name">{a.name}</span>
+                    </div>
+                    <div className="recon-angle-claim">{a.claim}</div>
+                    <div className="recon-angle-proof">{a.proof}</div>
+                  </div>
+                ))}
+              </div>
+              {brief.activation && (
+                <div className="recon-brief-row" style={{ marginTop: 14 }}>
+                  <span className="recon-brief-k">Activation</span>
+                  <span className="recon-brief-v hl">{brief.activation}</span>
+                </div>
+              )}
+            </>
+          )}
+
+          {brief.briefType === 'hybrid' && brief.creative && brief.media && (
+            <div className="recon-hybrid-grid">
+              <div className="recon-hybrid-col">
+                <div className="recon-hybrid-head accent-pink">&#9656; CREATIVE</div>
+                <div className="recon-hybrid-row"><span className="hk">Concept</span><span className="hv">{brief.creative.concept}</span></div>
+                <div className="recon-hybrid-row"><span className="hk">Visual</span><span className="hv">{brief.creative.visual}</span></div>
+              </div>
+              <div className="recon-hybrid-col">
+                <div className="recon-hybrid-head accent-violet">&#9656; MEDIA</div>
+                <div className="recon-hybrid-row"><span className="hk">Audience</span><span className="hv">{brief.media.audience}</span></div>
+                <div className="recon-hybrid-row"><span className="hk">Budget</span><span className="hv">{brief.media.budget}</span></div>
+                <div className="recon-hybrid-row"><span className="hk">Runtime</span><span className="hv">{brief.media.runtime}</span></div>
+                <div className="recon-hybrid-row"><span className="hk">Target KPI</span><span className="hv hl">{brief.media.kpi}</span></div>
+              </div>
+            </div>
+          )}
+
+          {brief.briefType === 'lifecycle' && (
+            <>
+              <div className="recon-brief-rows">
+                {brief.trigger && <div className="recon-brief-row"><span className="recon-brief-k">Trigger</span><span className="recon-brief-v">{brief.trigger}</span></div>}
+                {brief.segment && <div className="recon-brief-row"><span className="recon-brief-k">Segment</span><span className="recon-brief-v">{brief.segment}</span></div>}
+                {brief.tone && <div className="recon-brief-row"><span className="recon-brief-k">Tone</span><span className="recon-brief-v">{brief.tone}</span></div>}
+              </div>
+              {brief.sequence && (
+                <div className="recon-sequence">
+                  <div className="recon-sequence-label">SEQUENCE</div>
+                  {brief.sequence.map((s, i) => (
+                    <div className="recon-seq-step" key={i}>
+                      <div className="recon-seq-day">{s.day}</div>
+                      <div className="recon-seq-content">
+                        <div className="recon-seq-hook">{s.hook}</div>
+                        <div className="recon-seq-purpose">{s.purpose}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {brief.kpi && (
+                <div className="recon-brief-row" style={{ marginTop: 14 }}>
+                  <span className="recon-brief-k">KPI</span>
+                  <span className="recon-brief-v hl">{brief.kpi}</span>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Default k/v rows for content / media / pr — minus the hook row (already shown above) */}
+          {(brief.briefType === 'content' || brief.briefType === 'media' || brief.briefType === 'pr') && detailRows.length > 0 && (
+            <div className="recon-brief-rows">
+              {detailRows.map((row, j) => (
+                <div className="recon-brief-row" key={j}>
+                  <span className="recon-brief-k">{row.k}</span>
+                  <span className="recon-brief-v">{row.v}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -5073,100 +5414,76 @@ function BriefCard({ brief, idx }) {
 /* ================================================================
    RECON — Output View
    ================================================================ */
-function ReconOutput({ data, bottleneck, output, deptRouting }) {
+function ReconOutput({ data, bottlenecks, output, deptRouting }) {
+  const brand = data.brand || 'your brand';
+  const bottleneckList = bottlenecks || [];
+  const deptList = (deptRouting && deptRouting.depts) || [];
+  const totalAgents = deptList.reduce((sum, d) => sum + (d.agents ? d.agents.length : 0), 0);
+  const briefCount = (output.briefs || []).length;
+
   return (
     <div className="recon-output">
-      {/* Header */}
+      {/* Header — brand-led, eyebrow + statement */}
       <div className="recon-head">
         <div className="recon-head-left">
+          <div className="recon-head-eyebrow">
+            <span className="recon-head-eyebrow-dot"></span>
+            RECON COMPLETE
+          </div>
           <div className="recon-head-title">
-            {data.brand.toUpperCase()} &mdash; {data.category.toUpperCase()}
+            For {brand}
           </div>
-          <div className="recon-head-tag">
-            <span className="tag-dot" style={{ background: bottleneck.color, boxShadow: `0 0 8px ${bottleneck.color}` }}></span>
-            Bottleneck: {bottleneck.label}
-          </div>
+          {bottleneckList.length > 0 && (
+            <div className="recon-head-bottlenecks">
+              {bottleneckList.map((b, i) => (
+                <span
+                  key={i}
+                  className="recon-head-bottleneck-tag"
+                  style={{
+                    borderColor: b.color,
+                    color: b.color,
+                  }}
+                >
+                  <span className="tag-dot" style={{ background: b.color, boxShadow: `0 0 6px ${b.color}` }}></span>
+                  {b.label}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
-        <div className="recon-head-badge">RECON COMPLETE</div>
       </div>
 
-      {/* Multi-Department Routing Panel */}
-      {deptRouting && deptRouting.depts && (
-        <div className="recon-dept-panel">
-          <div className="recon-dept-routing">
-            <span className="mono" style={{ color: 'var(--text-meta)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>ROUTED TO</span>
-            <span className="routing-arrow">&#8600;</span>
-            <span className="recon-dept-summary">{deptRouting.depts.length} DEPARTMENT{deptRouting.depts.length > 1 ? 'S' : ''} ACTIVATED</span>
-          </div>
-          <div className="recon-dept-cards-grid" data-count={deptRouting.depts.length}>
-            {deptRouting.depts.map((d, i) => (
-              <div className="recon-dept-card" key={i} data-color={d.color}>
-                <div className="recon-dept-header">
-                  <div className="recon-dept-name" style={{ color: `var(--neon-${d.color})` }}>
-                    {d.name}
-                  </div>
-                  <div className="recon-dept-status">
-                    <span className="pulse-dot"></span>LIVE
-                  </div>
-                </div>
-                <div className="recon-dept-agent-count">{d.agents.length} agent{d.agents.length > 1 ? 's' : ''} activated</div>
-                <div className="recon-agent-list">
-                  {d.agents.map((a, j) => (
-                    <div className="recon-agent" key={j} style={{ animationDelay: `${(i * 3 + j) * 0.08}s` }}>
-                      <span className={`term-agent ${a.color}`}>&#9656; {a.name}</span>
-                      <span className="recon-agent-status">online</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* Demoted routing line — single line, no card */}
+      {deptList.length > 0 && (
+        <div className="recon-routing-line">
+          <span className="recon-routing-marker">//</span>
+          <span className="recon-routing-text">
+            Routed through <strong>{deptList.map(d => d.name).join(' + ')}</strong>
+            {totalAgents > 0 && <span className="recon-routing-meta"> · {totalAgents} specialist{totalAgents !== 1 ? 's' : ''} activated</span>}
+          </span>
         </div>
       )}
 
-      {/* Intel Cards — 3 tight panels */}
-      <div className="recon-intel-grid">
-        <div className="recon-intel-card">
-          <div className="recon-intel-head">
-            <span className="recon-intel-label cyan">&#9642; SIGNAL</span>
-            <span className="recon-intel-tag">{output.intel.signal.tag}</span>
-          </div>
-          <div className="recon-intel-text">{output.intel.signal.text}</div>
-        </div>
-        <div className="recon-intel-card">
-          <div className="recon-intel-head">
-            <span className="recon-intel-label pink">&#9642; GAP</span>
-            <span className="recon-intel-tag">{output.intel.gap.tag}</span>
-          </div>
-          <div className="recon-intel-text">{output.intel.gap.text}</div>
-        </div>
-        <div className="recon-intel-card">
-          <div className="recon-intel-head">
-            <span className="recon-intel-label green">&#9642; WINDOW</span>
-            <span className="recon-intel-tag">{output.intel.window.tag}</span>
-          </div>
-          <div className="recon-intel-text">{output.intel.window.text}</div>
-        </div>
-      </div>
-
-      {/* Briefs */}
+      {/* Briefs stack */}
       <div className="recon-briefs-section">
         <div className="recon-briefs-head">
           <div className="recon-briefs-title">
             <span className="recon-briefs-bar"></span>
-            THIS WEEK&rsquo;S BRIEFS
+            What we&rsquo;d ship for {brand} this week
           </div>
-          <div className="recon-briefs-meta">3 of 12 weekly</div>
+          <div className="recon-briefs-meta">{briefCount} of 12 weekly</div>
         </div>
         <div className="recon-briefs-stack">
-          {output.briefs.map((b, i) => (
-            <BriefCard brief={b} idx={i} key={b.id} />
+          {(output.briefs || []).map((b, i) => (
+            <BriefCard brief={b} idx={i} key={b.id || i} />
           ))}
         </div>
       </div>
 
       <div className="recon-footer">
-        This is 3 briefs from a single recon. The full system produces 12&ndash;15 briefs every week across 6 departments, plus a weekly intelligence brief feeding all of them.
+        {briefCount} briefs across {deptList.length || 1} department{deptList.length !== 1 ? 's' : ''}.
+        The full engine ships 12&ndash;15 briefs every week across 6 departments &mdash;
+        in {brand}&rsquo;s voice, on {brand}&rsquo;s cadence.
       </div>
     </div>
   );
@@ -5175,11 +5492,11 @@ function ReconOutput({ data, bottleneck, output, deptRouting }) {
 function Diagnostic({ reconStarter }) {
   const [ref, visible] = useReveal();
   const [step, setStep] = useState(0);
-  const [data, setData] = useState({ category: '', brand: '', differentiator: '', competitors: '', bottleneck: '' });
+  const [data, setData] = useState({ category: '', brand: '', differentiator: '', competitors: '', bottlenecks: [] });
   const [procLines, setProcLines] = useState([]);
-  const [showOutput, setShowOutput] = useState(false);                                     
-    const [apiResult, setApiResult] = useState(null);                                        
-    const [apiError, setApiError] = useState(null);
+  const [showOutput, setShowOutput] = useState(false);
+  const [apiResult, setApiResult] = useState(null);
+  const [apiError, setApiError] = useState(null);
 
   // React to hero's recon starter — pre-fill category and advance to step 1
   useEffect(() => {
@@ -5192,42 +5509,69 @@ function Diagnostic({ reconStarter }) {
   }, [reconStarter && reconStarter.signal]);
 
   const update = (field) => (e) => setData({ ...data, [field]: e.target.value });
-  const selectBottleneck = (id) => setData(prev => ({ ...prev, bottleneck: id }));
+  const toggleBottleneck = (id) => setData(prev => {
+    const current = prev.bottlenecks || [];
+    if (current.includes(id)) {
+      return { ...prev, bottlenecks: current.filter(b => b !== id) };
+    }
+    if (current.length >= 3) return prev; // cap at 3
+    return { ...prev, bottlenecks: [...current, id] };
+  });
 
   const canAdvance = () => {
     if (step === 0) return data.category.trim().length > 0;
-    if (step === 1) return data.brand.trim().length > 0 && data.bottleneck.length > 0;
+    if (step === 1) return data.brand.trim().length > 0 && (data.bottlenecks || []).length > 0;
     return true;
   };
 
-  const startProcessing = () => {                                                      
-        setStep(2);
-        setProcLines([]);                                                                    
-        setApiResult(null);                         
-        setApiError(null);                                                                     
-                                                                                             
-      // Kick off the real Claude API call in parallel with the animation.
-      fetch('/api/recon', {                                                                  
-        method: 'POST',                                                                  
-        headers: { 'content-type': 'application/json' },       
-        body: JSON.stringify({                          
-          category: data.category,                  
-          brand: data.brand,                                                                 
-          differentiator: data.differentiator,         
-          competitors: data.competitors,                                                     
-          bottleneck: data.bottleneck,                                                   
-        }),                                         
-      })                                                                                     
-        .then((r) => r.ok ? r.json() : r.json().then((j) => Promise.reject(j)))
-        .then((result) => setApiResult(result))                                              
-        .catch((err) => {                                                                
-          console.error('Recon API error:', err);   
-          setApiError(err);                         
-        });
-    const bottleneckLabel = BOTTLENECKS.find(b => b.id === data.bottleneck)?.label.toLowerCase() || 'your bottleneck';
-    const deptRouting = DEPARTMENT_MAP[data.bottleneck];
-    const primary = deptRouting?.primary || 'BRAND INTELLIGENCE';
-    const allAgents = (deptRouting?.depts || []).flatMap(d => d.agents.map(a => ({ ...a, dept: d.name })));
+  const startProcessing = () => {
+    setStep(2);
+    setProcLines([]);
+    setApiResult(null);
+    setApiError(null);
+
+    // Kick off the real Claude API call in parallel with the animation.
+    fetch('/api/recon', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        category: data.category,
+        brand: data.brand,
+        differentiator: data.differentiator,
+        competitors: data.competitors,
+        bottlenecks: data.bottlenecks,
+      }),
+    })
+      .then((r) => r.ok ? r.json() : r.json().then((j) => Promise.reject(j)))
+      .then((result) => setApiResult(result))
+      .catch((err) => {
+        console.error('Recon API error:', err);
+        setApiError(err);
+      });
+
+    const selectedBottlenecks = data.bottlenecks || [];
+    const primaryBottleneck = selectedBottlenecks[0] || '';
+    const bottleneckLabel = selectedBottlenecks
+      .map(id => BOTTLENECKS.find(b => b.id === id)?.label.toLowerCase())
+      .filter(Boolean)
+      .join(' + ') || 'your bottleneck';
+
+    // Merge department routing across all selected bottlenecks (dedupe by name)
+    const allDepts = [];
+    const seenDepts = new Set();
+    selectedBottlenecks.forEach(id => {
+      const r = DEPARTMENT_MAP[id];
+      if (!r || !r.depts) return;
+      r.depts.forEach(d => {
+        if (!seenDepts.has(d.name)) {
+          seenDepts.add(d.name);
+          allDepts.push(d);
+        }
+      });
+    });
+    const deptRouting = { depts: allDepts };
+    const primary = (allDepts[0] && allDepts[0].name) || 'BRAND INTELLIGENCE';
+    const allAgents = allDepts.flatMap(d => d.agents.map(a => ({ ...a, dept: d.name })));
 
     const lines = [
       // Phase 1: Scan (0-3s)
@@ -5277,18 +5621,36 @@ function Diagnostic({ reconStarter }) {
     }, afterAgentsDelay + 10000);
   };
 
- const reset = () => {                                                                
-      setStep(0);                                                                            
-      setData({ category: '', brand: '', differentiator: '', competitors: '', bottleneck: ''
-  });                                                                                        
-      setProcLines([]);                                                                  
-      setShowOutput(false);                         
-      setApiResult(null);                                                                    
-      setApiError(null);                        
-    };          
+  const reset = () => {
+    setStep(0);
+    setData({ category: '', brand: '', differentiator: '', competitors: '', bottlenecks: [] });
+    setProcLines([]);
+    setShowOutput(false);
+    setApiResult(null);
+    setApiError(null);
+  };
 
-  const bottleneckObj = BOTTLENECKS.find(b => b.id === data.bottleneck) || BOTTLENECKS[0];
-  const output = apiResult || RECON_OUTPUTS[data.bottleneck] || RECON_OUTPUTS.awareness;
+  const bottleneckObjs = (data.bottlenecks || []).map(id => BOTTLENECKS.find(b => b.id === id)).filter(Boolean);
+  const primaryBottleneckObj = bottleneckObjs[0] || BOTTLENECKS[0];
+  const output = apiResult || RECON_OUTPUTS[(data.bottlenecks && data.bottlenecks[0]) || 'awareness'] || RECON_OUTPUTS.awareness;
+
+  // Merge departments across all selected bottlenecks, dedupe by name
+  const mergedDeptRouting = (() => {
+    if (!data.bottlenecks || data.bottlenecks.length === 0) return null;
+    const allDepts = [];
+    const seen = new Set();
+    data.bottlenecks.forEach(id => {
+      const r = DEPARTMENT_MAP[id];
+      if (!r || !r.depts) return;
+      r.depts.forEach(d => {
+        if (!seen.has(d.name)) {
+          seen.add(d.name);
+          allDepts.push(d);
+        }
+      });
+    });
+    return { depts: allDepts };
+  })();
 
   const statusText = step === 0 ? 'AWAITING INPUT' : step === 1 ? 'STEP 2 OF 2' : step === 2 ? 'PROCESSING...' : 'COMPLETE';
   const statusColor = step === 3 ? 'var(--neon-green)' : step === 2 ? 'var(--neon-yellow)' : 'var(--text-meta)';
@@ -5368,32 +5730,42 @@ function Diagnostic({ reconStarter }) {
                   />
                 </div>
                 <div className="diag-input-group">
-                  <div className="diag-input-label">What's holding you back? (pick one)</div>
+                  <div className="diag-input-label diag-input-label-row">
+                    <span>What's holding you back? (pick up to 3)</span>
+                    <span className={`diag-chip-counter${(data.bottlenecks || []).length >= 3 ? ' full' : ''}`}>
+                      {(data.bottlenecks || []).length} / 3
+                    </span>
+                  </div>
                   <div className="diag-chips">
-                    {BOTTLENECKS.map((b) => (
-                      <button
-                        key={b.id}
-                        type="button"
-                        className={`diag-chip${data.bottleneck === b.id ? ' selected' : ''}`}
-                        onClick={() => selectBottleneck(b.id)}
-                        style={{
-                          '--chip-color': b.color,
-                          '--chip-bg': b.color === 'var(--neon-yellow)'
-                            ? 'rgba(232, 255, 0, 0.06)'
-                            : b.color === 'var(--neon-cyan)'
-                              ? 'rgba(0, 240, 255, 0.06)'
-                              : b.color === 'var(--neon-pink)'
-                                ? 'rgba(255, 45, 107, 0.06)'
-                                : b.color === 'var(--neon-green)'
-                                  ? 'rgba(0, 255, 136, 0.06)'
-                                  : b.color === 'var(--neon-violet)'
-                                    ? 'rgba(168, 85, 247, 0.08)'
-                                    : 'rgba(255, 170, 0, 0.06)',
-                        }}
-                      >
-                        <span className="chip-marker"></span>{b.label}
-                      </button>
-                    ))}
+                    {BOTTLENECKS.map((b) => {
+                      const isSelected = (data.bottlenecks || []).includes(b.id);
+                      const atCap = (data.bottlenecks || []).length >= 3 && !isSelected;
+                      return (
+                        <button
+                          key={b.id}
+                          type="button"
+                          disabled={atCap}
+                          className={`diag-chip${isSelected ? ' selected' : ''}${atCap ? ' disabled' : ''}`}
+                          onClick={() => toggleBottleneck(b.id)}
+                          style={{
+                            '--chip-color': b.color,
+                            '--chip-bg': b.color === 'var(--neon-yellow)'
+                              ? 'rgba(232, 255, 0, 0.06)'
+                              : b.color === 'var(--neon-cyan)'
+                                ? 'rgba(0, 240, 255, 0.06)'
+                                : b.color === 'var(--neon-pink)'
+                                  ? 'rgba(255, 45, 107, 0.06)'
+                                  : b.color === 'var(--neon-green)'
+                                    ? 'rgba(0, 255, 136, 0.06)'
+                                    : b.color === 'var(--neon-violet)'
+                                      ? 'rgba(168, 85, 247, 0.08)'
+                                      : 'rgba(255, 170, 0, 0.06)',
+                          }}
+                        >
+                          <span className="chip-marker"></span>{b.label}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
                 <div className="diag-input-group">
@@ -5434,14 +5806,14 @@ function Diagnostic({ reconStarter }) {
             {/* STEP 2: Processing — terminal style */}
             {step === 2 && (
               <div className="diag-step" key="step2">
-                <RunTerminal procLines={procLines} bottleneckLabel={bottleneckObj.label} />
+                <RunTerminal procLines={procLines} bottleneckLabel={primaryBottleneckObj.label} />
               </div>
             )}
 
             {/* STEP 3: Output */}
             {step === 3 && showOutput && (
               <div className="diag-step" key="step3">
-                <ReconOutput data={data} bottleneck={bottleneckObj} output={output} deptRouting={DEPARTMENT_MAP[data.bottleneck]} />
+                <ReconOutput data={data} bottlenecks={bottleneckObjs} output={output} deptRouting={mergedDeptRouting} />
                 <div className="diag-output-ctas">
                   {/* <a className="btn-primary" href="mailto:alex.maikowski@gmail.com?subject=I%20want%20to%20make%20you%20obsolete!" style={{ textDecoration: 'none' }}>
                     Start Your Quest <span style={{ fontSize: 16 }}>&rarr;</span>
