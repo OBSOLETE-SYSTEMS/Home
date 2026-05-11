@@ -6539,11 +6539,11 @@ function ContactModal({ open, onClose, context }) {
       } else {
         const body = await res.json().catch(() => ({}));
         setStatus('error');
-        setErrorMsg(body?.errors?.[0]?.message || 'Send failed. Try again or email alex.maikowski@gmail.com directly.');
+        setErrorMsg(body?.errors?.[0]?.message || 'Send failed. Please try again in a moment.');
       }
     } catch (err) {
       setStatus('error');
-      setErrorMsg('Network error. Try again or email alex.maikowski@gmail.com directly.');
+      setErrorMsg('Network error. Please try again in a moment.');
     }
   };
 
@@ -6562,7 +6562,7 @@ function ContactModal({ open, onClose, context }) {
               <div className="contact-success-mark">{'✓'}</div>
               <div className="contact-success-title">Message received.</div>
               <div className="contact-success-sub">
-                Alex will reach out within 24 hours.{context ? ' Your recon context came through.' : ''}
+                We'll reach out within 24 hours.{context ? ' Your recon context came through.' : ''}
               </div>
             </div>
           ) : (
