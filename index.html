@@ -103,27 +103,7 @@ body::before {
   z-index: 10000;
 }
 
-/* --- Film Grain Overlay --- */
-body::after {
-  content: '';
-  position: fixed;
-  top: -50%; left: -50%;
-  width: 200%; height: 200%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  opacity: var(--grain-opacity);
-  pointer-events: none;
-  z-index: 10001;
-  animation: grain 0.5s steps(1) infinite;
-}
-
-@keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-2%, -3%); }
-  30% { transform: translate(3%, 1%); }
-  50% { transform: translate(-1%, 3%); }
-  70% { transform: translate(2%, -2%); }
-  90% { transform: translate(-3%, 1%); }
-}
+/* --- Film Grain Overlay (removed: 2x viewport animated SVG was the largest compositor cost on the page) --- */
 
 /* --- Global Typography --- */
 .label {
@@ -477,7 +457,6 @@ a:hover { text-decoration: underline; }
 .hero-transition-gif {
   width: 320px;
   max-width: 70vw;
-  mix-blend-mode: screen;
   position: relative;
   z-index: 1;
   opacity: 0;
@@ -495,7 +474,6 @@ a:hover { text-decoration: underline; }
   width: 100%;
   height: auto;
   display: block;
-  filter: saturate(1.25);
 }
 
 .hero-transition-tag {
@@ -1865,10 +1843,7 @@ a:hover { text-decoration: underline; }
   width: 100%;
   height: auto;
   display: block;
-  mix-blend-mode: screen;
-  filter: saturate(1.25) brightness(1.1);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 50%, transparent 85%);
-  mask-image: radial-gradient(ellipse at center, black 50%, transparent 85%);
+  opacity: 0.85;
 }
 
 @media (max-width: 900px) {
@@ -4191,6 +4166,291 @@ a:hover { text-decoration: underline; }
     padding: 18px 20px;
   }
 }
+
+/* ================================================================
+   CONTACT MODAL — used by nav Contact link + Recon Complete CTA
+   ================================================================ */
+.contact-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  z-index: 10100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: contact-fade 0.18s ease-out;
+}
+
+@keyframes contact-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.contact-card {
+  width: 100%;
+  max-width: 560px;
+  background: var(--card);
+  border: 1px solid var(--border-light);
+  position: relative;
+  max-height: 92vh;
+  overflow-y: auto;
+}
+
+.contact-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--dark);
+}
+
+.contact-topbar-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a8a39c;
+}
+
+.contact-close {
+  background: none;
+  border: none;
+  color: var(--text-meta);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+.contact-close:hover { color: var(--neon-yellow); }
+
+.contact-body { padding: 28px 28px 24px; }
+
+.contact-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--neon-yellow);
+  margin-bottom: 10px;
+}
+
+.contact-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.05;
+  color: var(--white);
+  margin: 0 0 10px;
+}
+
+.contact-sub {
+  font-size: 14px;
+  font-weight: 400;
+  color: #c8c4be;
+  margin: 0 0 22px;
+  line-height: 1.5;
+}
+
+.contact-context {
+  background: rgba(232, 255, 0, 0.04);
+  border: 1px solid rgba(232, 255, 0, 0.18);
+  padding: 12px 14px;
+  margin: 0 0 20px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+}
+
+.contact-context-label {
+  color: var(--neon-yellow);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 10px;
+  margin-bottom: 6px;
+}
+
+.contact-context-row {
+  display: flex;
+  gap: 8px;
+}
+
+.contact-context-key {
+  color: var(--text-meta);
+  min-width: 92px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 10px;
+}
+
+.contact-context-val { color: var(--white); flex: 1; }
+
+.contact-field { margin-bottom: 14px; }
+
+.contact-field-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a8a39c;
+  margin-bottom: 7px;
+}
+
+.contact-input,
+.contact-textarea {
+  width: 100%;
+  background: var(--black);
+  border: 1px solid var(--border-light);
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.contact-input::placeholder,
+.contact-textarea::placeholder {
+  color: #6a6660;
+  opacity: 1;
+}
+
+.contact-input:focus,
+.contact-textarea:focus { border-color: var(--neon-yellow); }
+
+.contact-textarea {
+  resize: vertical;
+  min-height: 110px;
+  font-family: var(--font-mono);
+  line-height: 1.55;
+}
+
+.contact-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.contact-error {
+  color: #ff7a7a;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+
+.contact-success {
+  text-align: center;
+  padding: 12px 0 4px;
+}
+
+.contact-success-mark {
+  display: inline-block;
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid var(--neon-green);
+  color: var(--neon-green);
+  font-size: 22px;
+  line-height: 42px;
+  margin-bottom: 14px;
+}
+
+.contact-success-title {
+  font-family: var(--font-display);
+  color: var(--white);
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.contact-success-sub {
+  color: var(--text-dim);
+  font-size: 13px;
+  font-weight: 300;
+}
+
+/* ================================================================
+   RECON COMPLETE — fullscreen modal overlay
+   ================================================================ */
+.recon-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  z-index: 10050;
+  overflow-y: auto;
+  padding: 40px 24px;
+  animation: contact-fade 0.2s ease-out;
+}
+
+.recon-modal-frame {
+  max-width: 980px;
+  margin: 0 auto;
+  background: var(--card);
+  border: 1px solid var(--border-light);
+  position: relative;
+}
+
+.recon-modal-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--dark);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.recon-modal-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.recon-modal-status {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--neon-green);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.recon-modal-status .dot {
+  width: 7px;
+  height: 7px;
+  background: var(--neon-green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--neon-green);
+}
+
+.recon-modal-body { padding: 32px 32px 24px; }
+
+.recon-modal-ctas {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 32px 32px;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .recon-modal-overlay { padding: 20px 12px; }
+  .recon-modal-body { padding: 22px 18px 16px; }
+  .recon-modal-ctas { padding: 18px 18px 22px; }
+  .contact-body { padding: 22px 20px 18px; }
+}
 </style>
 </head>
 <body>
@@ -4243,7 +4503,7 @@ function Marquee({ items }) {
 /* ================================================================
    NAVIGATION
    ================================================================ */
-function Nav({ onDiagnostic }) {
+function Nav({ onDiagnostic, onContact }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState('');
@@ -4302,6 +4562,7 @@ function Nav({ onDiagnostic }) {
         <button className={linkClass('departments')} onClick={() => scrollTo('departments')}>Departments</button>
         <button className={linkClass('how')} onClick={() => scrollTo('how')}>Our System</button>
         <button className={linkClass('difference')} onClick={() => scrollTo('difference')}>Our Difference</button>
+        <button className="nav-link" onClick={() => { setOpen(false); onContact?.(); }}>Contact</button>
         {/* <button className={linkClass('agencies')} onClick={() => scrollTo('agencies')}>For Agencies</button> */}
         {/* <a className="nav-cta" href="mailto:alex.maikowski@gmail.com?subject=I%20want%20to%20make%20you%20obsolete!">Start a Quest</a> -- HIDDEN: re-enable when going to cold market */}
       </div>
@@ -5592,7 +5853,7 @@ function ReconOutput({ data, bottlenecks, output, deptRouting }) {
   );
 }
 
-function Diagnostic({ reconStarter }) {
+function Diagnostic({ reconStarter, onContact }) {
   const [ref, visible] = useReveal();
   const [step, setStep] = useState(0);
   const [data, setData] = useState({ category: '', brand: '', differentiator: '', competitors: '', bottlenecks: [] });
@@ -5600,6 +5861,23 @@ function Diagnostic({ reconStarter }) {
   const [showOutput, setShowOutput] = useState(false);
   const [apiResult, setApiResult] = useState(null);
   const [apiError, setApiError] = useState(null);
+  const [reconModalOpen, setReconModalOpen] = useState(false);
+
+  // Auto-open the recon modal when output is ready; lock body scroll while open.
+  useEffect(() => {
+    if (step === 3 && showOutput) setReconModalOpen(true);
+  }, [step, showOutput]);
+
+  useEffect(() => {
+    if (!reconModalOpen) return;
+    const onKey = (e) => { if (e.key === 'Escape') setReconModalOpen(false); };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [reconModalOpen]);
 
   // React to hero's recon starter — pre-fill category and advance to step 1
   useEffect(() => {
@@ -5608,6 +5886,7 @@ function Diagnostic({ reconStarter }) {
       setStep(1);
       setProcLines([]);
       setShowOutput(false);
+      setReconModalOpen(false);
     }
   }, [reconStarter && reconStarter.signal]);
 
@@ -5731,6 +6010,7 @@ function Diagnostic({ reconStarter }) {
     setShowOutput(false);
     setApiResult(null);
     setApiError(null);
+    setReconModalOpen(false);
   };
 
   const bottleneckObjs = (data.bottlenecks || []).map(id => BOTTLENECKS.find(b => b.id === id)).filter(Boolean);
@@ -5913,14 +6193,24 @@ function Diagnostic({ reconStarter }) {
               </div>
             )}
 
-            {/* STEP 3: Output */}
+            {/* STEP 3: Output (inline view — visible after the user closes the fullscreen modal) */}
             {step === 3 && showOutput && (
               <div className="diag-step" key="step3">
                 <ReconOutput data={data} bottlenecks={bottleneckObjs} output={output} deptRouting={mergedDeptRouting} />
                 <div className="diag-output-ctas">
-                  {/* <a className="btn-primary" href="mailto:alex.maikowski@gmail.com?subject=I%20want%20to%20make%20you%20obsolete!" style={{ textDecoration: 'none' }}>
-                    Start Your Quest <span style={{ fontSize: 16 }}>&rarr;</span>
-                  </a> -- HIDDEN: re-enable when going to cold market */}
+                  <button
+                    className="btn-primary"
+                    onClick={() => onContact?.({
+                      category: data.category,
+                      brand: data.brand,
+                      bottlenecks: bottleneckObjs.map(b => b.label).join(', '),
+                    })}
+                  >
+                    Contact Us <span style={{ fontSize: 16 }}>&rarr;</span>
+                  </button>
+                  <button className="btn-outline" onClick={() => setReconModalOpen(true)}>
+                    Re-open Full View
+                  </button>
                   <button className="btn-outline" onClick={reset}>
                     Run Again
                   </button>
@@ -5934,6 +6224,52 @@ function Diagnostic({ reconStarter }) {
         </div>
         </div>
       </div>
+
+      {/* RECON COMPLETE — fullscreen modal overlay */}
+      {reconModalOpen && step === 3 && showOutput && (
+        <div
+          className="recon-modal-overlay"
+          onClick={(e) => { if (e.target === e.currentTarget) setReconModalOpen(false); }}
+        >
+          <div className="recon-modal-frame">
+            <div className="recon-modal-topbar">
+              <div className="recon-modal-topbar-left">
+                <div className="diag-topbar-dots">
+                  <div className="diag-topbar-dot"></div>
+                  <div className="diag-topbar-dot"></div>
+                  <div className="diag-topbar-dot"></div>
+                </div>
+                <div className="recon-modal-status">
+                  <span className="dot"></span>RECON COMPLETE
+                </div>
+              </div>
+              <button
+                className="contact-close"
+                onClick={() => setReconModalOpen(false)}
+                aria-label="Close"
+              >{'✕'}</button>
+            </div>
+            <div className="recon-modal-body">
+              <ReconOutput data={data} bottlenecks={bottleneckObjs} output={output} deptRouting={mergedDeptRouting} />
+            </div>
+            <div className="recon-modal-ctas">
+              <button className="btn-outline" onClick={reset}>
+                Run Again
+              </button>
+              <button
+                className="btn-primary"
+                onClick={() => onContact?.({
+                  category: data.category,
+                  brand: data.brand,
+                  bottlenecks: bottleneckObjs.map(b => b.label).join(', '),
+                })}
+              >
+                Contact Us <span style={{ fontSize: 16 }}>&rarr;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -6129,8 +6465,204 @@ function CTA() {
 /* ================================================================
    APP
    ================================================================ */
+/* ================================================================
+   CONTACT MODAL — Formspree-backed, reusable from nav + recon modal
+   ================================================================ */
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzldwre';
+
+function ContactModal({ open, onClose, context }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [brand, setBrand] = useState('');
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState('idle'); // idle | sending | success | error
+  const [errorMsg, setErrorMsg] = useState('');
+
+  React.useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [open, onClose]);
+
+  React.useEffect(() => {
+    if (open && context && context.brand && !brand) {
+      setBrand(context.brand);
+    }
+  }, [open, context]);
+
+  if (!open) return null;
+
+  const reset = () => {
+    setName(''); setEmail(''); setBrand(''); setMessage('');
+    setStatus('idle'); setErrorMsg('');
+  };
+
+  const handleClose = () => {
+    if (status === 'success') reset();
+    onClose();
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (status === 'sending') return;
+    setStatus('sending');
+    setErrorMsg('');
+
+    const payload = {
+      name,
+      email,
+      brand,
+      message,
+      _subject: `OBSOLETE site lead${brand ? ' — ' + brand : ''}`,
+    };
+    if (context) {
+      if (context.category) payload.recon_category = context.category;
+      if (context.bottlenecks) payload.recon_bottlenecks = context.bottlenecks;
+      payload.lead_source = 'recon-complete';
+    } else {
+      payload.lead_source = 'nav-contact';
+    }
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        setStatus('success');
+      } else {
+        const body = await res.json().catch(() => ({}));
+        setStatus('error');
+        setErrorMsg(body?.errors?.[0]?.message || 'Send failed. Try again or email alex.maikowski@gmail.com directly.');
+      }
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg('Network error. Try again or email alex.maikowski@gmail.com directly.');
+    }
+  };
+
+  const onBackdrop = (e) => { if (e.target === e.currentTarget) handleClose(); };
+
+  return (
+    <div className="contact-overlay" onClick={onBackdrop}>
+      <div className="contact-card">
+        <div className="contact-topbar">
+          <div className="contact-topbar-title">OBSOLETE // CONTACT</div>
+          <button className="contact-close" onClick={handleClose} aria-label="Close">{'✕'}</button>
+        </div>
+        <div className="contact-body">
+          {status === 'success' ? (
+            <div className="contact-success">
+              <div className="contact-success-mark">{'✓'}</div>
+              <div className="contact-success-title">Message received.</div>
+              <div className="contact-success-sub">
+                Alex will reach out within 24 hours.{context ? ' Your recon context came through.' : ''}
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="contact-eyebrow">// LET'S TALK</div>
+              <h3 className="contact-title">
+                {context ? 'Want this running on your brand?' : 'Tell us about your brand.'}
+              </h3>
+              <p className="contact-sub">
+                {context
+                  ? "Drop your details — we'll send back what a 30-Day Quest would look like for you."
+                  : "Quick intro. We'll get back within 24 hours with a real next step, not a calendar link."}
+              </p>
+
+              {context && (context.category || context.bottlenecks) && (
+                <div className="contact-context">
+                  <div className="contact-context-label">// FROM YOUR RECON</div>
+                  {context.category && (
+                    <div className="contact-context-row">
+                      <span className="contact-context-key">Category</span>
+                      <span className="contact-context-val">{context.category}</span>
+                    </div>
+                  )}
+                  {context.brand && (
+                    <div className="contact-context-row">
+                      <span className="contact-context-key">Brand</span>
+                      <span className="contact-context-val">{context.brand}</span>
+                    </div>
+                  )}
+                  {context.bottlenecks && (
+                    <div className="contact-context-row">
+                      <span className="contact-context-key">Bottleneck</span>
+                      <span className="contact-context-val">{context.bottlenecks}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit}>
+                {errorMsg && <div className="contact-error">{errorMsg}</div>}
+                <div className="contact-field">
+                  <label className="contact-field-label">Your name</label>
+                  <input
+                    className="contact-input"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="contact-field">
+                  <label className="contact-field-label">Email</label>
+                  <input
+                    className="contact-input"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="contact-field">
+                  <label className="contact-field-label">Brand / company</label>
+                  <input
+                    className="contact-input"
+                    type="text"
+                    value={brand}
+                    onChange={(e) => setBrand(e.target.value)}
+                  />
+                </div>
+                <div className="contact-field">
+                  <label className="contact-field-label">What's the gap?</label>
+                  <textarea
+                    className="contact-textarea"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder={context ? 'Anything to add beyond your recon answers...' : 'What you’re trying to fix, what’s not working.'}
+                    rows={4}
+                  />
+                </div>
+                <div className="contact-actions">
+                  <button type="button" className="btn-outline" onClick={handleClose}>Cancel</button>
+                  <button type="submit" className="btn-primary" disabled={status === 'sending'}>
+                    {status === 'sending' ? 'Sending…' : 'Send'} <span style={{ fontSize: 15 }}>&rarr;</span>
+                  </button>
+                </div>
+              </form>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [reconStarter, setReconStarter] = useState({ category: '', signal: 0 });
+  const [contactState, setContactState] = useState({ open: false, context: null });
+
+  const openContact = (context) => setContactState({ open: true, context: context || null });
+  const closeContact = () => setContactState({ open: false, context: null });
 
   const startRecon = (category) => {
     setReconStarter({ category: category || '', signal: Date.now() });
@@ -6157,7 +6689,7 @@ function App() {
 
   return (
     <>
-      <Nav onDiagnostic={scrollToDiag} />
+      <Nav onDiagnostic={scrollToDiag} onContact={() => openContact(null)} />
       <Hero onStartRecon={startRecon} />
       <Marquee items={[
         'SOCIAL ENGINE',
@@ -6171,7 +6703,7 @@ function App() {
       <Marquee items={marqueeItems} />
       <Quest />
       <HowItWorks />
-      <Diagnostic reconStarter={reconStarter} />
+      <Diagnostic reconStarter={reconStarter} onContact={openContact} />
       <Difference />
       {/* <Agencies /> -- HIDDEN: see Agencies() component + .agencies-* CSS, both retained for re-enable */}
       <Proof />
@@ -6186,6 +6718,11 @@ function App() {
           DESIGNED TO NOT BE NEEDED
         </div>
       </footer>
+      <ContactModal
+        open={contactState.open}
+        onClose={closeContact}
+        context={contactState.context}
+      />
     </>
   );
 }
