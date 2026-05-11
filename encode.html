@@ -635,33 +635,95 @@ main {
 }
 
 /* ============================================================
-   UPLOADS LIST
+   UPLOADS LIST — real client uploads to Supabase
    ============================================================ */
+
+/* Identity — Brand + Email */
+.ul-identity {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 28px 0 0;
+  padding: 22px 24px;
+  border: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.012);
+}
+
+.ul-identity-field { display: flex; flex-direction: column; gap: 6px; }
+
+.ul-identity-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #b0aca5;
+}
+
+.ul-identity-input {
+  width: 100%;
+  background: var(--black);
+  border: 1px solid var(--border-light);
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.ul-identity-input::placeholder { color: #5a5652; }
+.ul-identity-input:focus { border-color: var(--cyan); }
+
+.ul-identity.has-error .ul-identity-input { border-color: var(--pink); }
+
+@media (max-width: 700px) {
+  .ul-identity { grid-template-columns: 1fr; padding: 18px; }
+}
+
+/* Uploads list */
 .uploads-list {
   list-style: none;
-  margin: 32px 0 0;
+  margin: 28px 0 0;
   padding: 0;
   border-top: 1px solid var(--border-light);
 }
 
 .ul-row {
   display: grid;
-  grid-template-columns: 56px minmax(180px, 240px) 1fr auto;
-  gap: 24px;
-  padding: 20px 0;
+  grid-template-columns: 48px 1fr auto 32px;
+  grid-template-areas:
+    "num info cta status"
+    "files files files files";
+  gap: 4px 20px;
+  padding: 18px 0;
   border-bottom: 1px solid var(--border);
   align-items: center;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  position: relative;
 }
 
-.ul-row:hover { background: rgba(255, 255, 255, 0.015); }
+.ul-row.dragover { background: rgba(0, 240, 255, 0.06); border-bottom-color: var(--cyan); }
+.ul-row.has-files { border-bottom-color: rgba(0, 255, 136, 0.35); }
+.ul-row.uploading { background: rgba(0, 240, 255, 0.025); }
+.ul-row.errored { border-bottom-color: var(--pink); }
+
+.ul-file {
+  position: absolute;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
 
 .ul-num {
+  grid-area: num;
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.18em;
   color: var(--text-meta);
+  align-self: center;
 }
+
+.ul-info { grid-area: info; display: flex; flex-direction: column; gap: 4px; }
 
 .ul-name {
   font-family: var(--font-display);
@@ -678,12 +740,54 @@ main {
   line-height: 1.5;
 }
 
-/* Animated upload status — cyan progress fill + checkmark, staggered per row */
+.ul-cta {
+  grid-area: cta;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  border: 1px dashed rgba(0, 240, 255, 0.45);
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: transparent;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.ul-cta:hover {
+  border-style: solid;
+  background: rgba(0, 240, 255, 0.05);
+  border-color: var(--cyan);
+}
+
+.ul-row.dragover .ul-cta {
+  border-style: solid;
+  border-color: var(--cyan);
+  background: rgba(0, 240, 255, 0.1);
+}
+
+.ul-row.has-files .ul-cta {
+  color: var(--green);
+  border-color: rgba(0, 255, 136, 0.45);
+}
+
+.ul-row.has-files .ul-cta:hover {
+  background: rgba(0, 255, 136, 0.05);
+}
+
+.ul-cta-empty { display: inline; }
+.ul-cta-count { display: inline; }
+.ul-row.has-files .ul-cta-empty { display: none; }
+
+/* Status indicator */
 .ul-status {
-  width: 26px;
-  height: 26px;
-  border: 1px solid rgba(0, 240, 255, 0.4);
-  background: rgba(0, 240, 255, 0.03);
+  grid-area: status;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border-light);
+  background: transparent;
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -691,56 +795,194 @@ main {
   justify-self: end;
   overflow: hidden;
   flex-shrink: 0;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-.ul-status::before {
+.ul-row.uploading .ul-status {
+  border-color: var(--cyan);
+}
+
+.ul-row.uploading .ul-status::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 0;
-  background: linear-gradient(90deg, rgba(0, 240, 255, 0.15), rgba(0, 240, 255, 0.4));
-  box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
-  animation: ulFill 11s ease-in-out infinite;
+  inset: 3px;
+  border: 1.5px solid transparent;
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: ulSpin 0.7s linear infinite;
+}
+
+.ul-row.has-files .ul-status {
+  border-color: var(--green);
+  background: rgba(0, 255, 136, 0.06);
 }
 
 .ul-check {
   display: block;
-  width: 11px;
-  height: 6px;
-  border-left: 2px solid var(--cyan);
-  border-bottom: 2px solid var(--cyan);
-  transform: rotate(-45deg) scale(0.4);
-  opacity: 0;
+  width: 10px;
+  height: 5px;
+  border-left: 2px solid var(--green);
+  border-bottom: 2px solid var(--green);
+  transform: rotate(-45deg) scale(0);
   margin-top: -2px;
-  position: relative;
-  z-index: 1;
-  animation: ulCheck 11s ease-in-out infinite;
-  filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.6));
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 0 4px rgba(0, 255, 136, 0.5));
 }
 
-@keyframes ulFill {
-  0%, 4%   { width: 0; opacity: 0.85; }
-  22%      { width: 100%; opacity: 0.85; }
-  26%, 92% { width: 100%; opacity: 0.5; }
-  100%     { width: 100%; opacity: 0.5; }
+.ul-row.has-files .ul-check {
+  transform: rotate(-45deg) scale(1);
 }
 
-@keyframes ulCheck {
-  0%, 22%  { opacity: 0; transform: rotate(-45deg) scale(0.4); }
-  28%      { opacity: 1; transform: rotate(-45deg) scale(1.2); }
-  34%, 92% { opacity: 1; transform: rotate(-45deg) scale(1); }
-  100%     { opacity: 1; transform: rotate(-45deg) scale(1); }
+@keyframes ulSpin {
+  to { transform: rotate(360deg); }
 }
 
-/* Staggered start per row — cascading upload */
-.ul-row:nth-child(1) .ul-status::before, .ul-row:nth-child(1) .ul-check { animation-delay: 0s; }
-.ul-row:nth-child(2) .ul-status::before, .ul-row:nth-child(2) .ul-check { animation-delay: 0.5s; }
-.ul-row:nth-child(3) .ul-status::before, .ul-row:nth-child(3) .ul-check { animation-delay: 1s; }
-.ul-row:nth-child(4) .ul-status::before, .ul-row:nth-child(4) .ul-check { animation-delay: 1.5s; }
-.ul-row:nth-child(5) .ul-status::before, .ul-row:nth-child(5) .ul-check { animation-delay: 2s; }
-.ul-row:nth-child(6) .ul-status::before, .ul-row:nth-child(6) .ul-check { animation-delay: 2.5s; }
+/* Files list (appears below the row header when files present) */
+.ul-files {
+  grid-area: files;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ul-row.has-files .ul-files,
+.ul-row.uploading .ul-files,
+.ul-row.errored .ul-files {
+  margin: 12px 0 4px;
+  padding-left: 68px;
+}
+
+@media (max-width: 700px) {
+  .ul-row.has-files .ul-files,
+  .ul-row.uploading .ul-files,
+  .ul-row.errored .ul-files {
+    padding-left: 0;
+  }
+}
+
+.ul-file-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border);
+}
+
+.ul-file-item.uploading { color: var(--cyan); border-color: rgba(0, 240, 255, 0.25); }
+.ul-file-item.done { color: var(--text); }
+.ul-file-item.error { color: var(--pink); border-color: rgba(255, 45, 107, 0.3); }
+
+.ul-file-item-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ul-file-item-size { color: var(--text-meta); font-size: 11px; }
+
+.ul-file-item-remove {
+  background: none;
+  border: none;
+  color: var(--text-meta);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: color 0.15s ease;
+}
+
+.ul-file-item-remove:hover { color: var(--pink); }
+
+/* Submit bar */
+.ul-submit-bar {
+  margin-top: 32px;
+  padding: 22px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.ul-submit-msg {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  flex: 1;
+  min-width: 200px;
+}
+
+.ul-submit-msg.error { color: var(--pink); }
+.ul-submit-msg.warn { color: var(--amber); }
+
+.ul-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: var(--yellow);
+  color: var(--black);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.ul-submit-btn:hover:not(:disabled) {
+  background: var(--white);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--yellow);
+}
+
+.ul-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ul-submit-arrow { font-size: 16px; }
+
+/* Success state */
+.ul-success {
+  margin-top: 32px;
+  padding: 56px 28px;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  background: rgba(0, 255, 136, 0.03);
+  text-align: center;
+}
+
+.ul-success-mark {
+  display: inline-block;
+  width: 56px;
+  height: 56px;
+  border: 1.5px solid var(--green);
+  color: var(--green);
+  font-size: 28px;
+  line-height: 54px;
+  margin-bottom: 18px;
+}
+
+.ul-success-title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: var(--white);
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+.ul-success-sub {
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 auto;
+}
 
 .uploads-footnote {
   margin-top: 28px;
@@ -832,15 +1074,14 @@ main {
   .ul-row {
     grid-template-columns: 40px 1fr auto;
     grid-template-areas:
-      "num name tag"
-      "num hint hint";
-    gap: 4px 16px;
+      "num info status"
+      "cta cta cta"
+      "files files files";
+    gap: 12px 16px;
     padding: 18px 0;
   }
-  .ul-num  { grid-area: num; align-self: start; padding-top: 4px; }
-  .ul-name { grid-area: name; }
-  .ul-hint { grid-area: hint; }
-  .ul-tag  { grid-area: tag; }
+  .ul-num  { align-self: start; padding-top: 4px; }
+  .ul-cta { width: 100%; text-align: center; }
 }
 
 @media (max-width: 600px) {
@@ -1146,7 +1387,7 @@ main {
   </section>
 
   <!-- ==================== UPLOADS ==================== -->
-  <section class="block">
+  <section class="block" id="uploads-section">
     <div class="wrap">
       <div class="block-label">// AFTER THE INTERVIEW</div>
       <h2 class="block-title">Send these over.</h2>
@@ -1154,51 +1395,129 @@ main {
         A few raw inputs help us train your engine. Skip whatever doesn't apply.
       </p>
 
-      <ul class="uploads-list">
+      <!-- Identity -->
+      <div class="ul-identity">
+        <div class="ul-identity-field">
+          <label class="ul-identity-label" for="ul-brand">Brand name</label>
+          <input id="ul-brand" type="text" class="ul-identity-input" placeholder="e.g. Willa's" autocomplete="organization" />
+        </div>
+        <div class="ul-identity-field">
+          <label class="ul-identity-label" for="ul-email">Your email</label>
+          <input id="ul-email" type="email" class="ul-identity-input" placeholder="founder@yourbrand.com" autocomplete="email" />
+        </div>
+      </div>
 
-        <li class="ul-row">
+      <ul class="uploads-list" id="uploads-list">
+
+        <li class="ul-row" data-category="best-content" data-num="01">
+          <input type="file" multiple class="ul-file" id="ul-file-best-content" />
           <span class="ul-num">01</span>
-          <span class="ul-name">Your best content</span>
-          <span class="ul-hint">Top 5&ndash;10 posts, campaigns, or assets you're proud of.</span>
+          <div class="ul-info">
+            <div class="ul-name">Your best content</div>
+            <div class="ul-hint">Top 5&ndash;10 posts, campaigns, or assets you're proud of.</div>
+          </div>
+          <label class="ul-cta" for="ul-file-best-content">
+            <span class="ul-cta-empty">Drop files or click</span>
+            <span class="ul-cta-count" hidden></span>
+          </label>
           <span class="ul-status" aria-hidden="true"><span class="ul-check"></span></span>
+          <ul class="ul-files"></ul>
         </li>
 
-        <li class="ul-row">
+        <li class="ul-row" data-category="customer-voice" data-num="02">
+          <input type="file" multiple class="ul-file" id="ul-file-customer-voice" />
           <span class="ul-num">02</span>
-          <span class="ul-name">Customer voice</span>
-          <span class="ul-hint">Screenshots of DMs, reviews, or emails you love (or dread).</span>
+          <div class="ul-info">
+            <div class="ul-name">Customer voice</div>
+            <div class="ul-hint">Screenshots of DMs, reviews, or emails you love (or dread).</div>
+          </div>
+          <label class="ul-cta" for="ul-file-customer-voice">
+            <span class="ul-cta-empty">Drop files or click</span>
+            <span class="ul-cta-count" hidden></span>
+          </label>
           <span class="ul-status" aria-hidden="true"><span class="ul-check"></span></span>
+          <ul class="ul-files"></ul>
         </li>
 
-        <li class="ul-row">
+        <li class="ul-row" data-category="brand-book" data-num="03">
+          <input type="file" multiple class="ul-file" id="ul-file-brand-book" />
           <span class="ul-num">03</span>
-          <span class="ul-name">Brand book</span>
-          <span class="ul-hint">If it exists. Whatever state &mdash; even a rough doc.</span>
+          <div class="ul-info">
+            <div class="ul-name">Brand book</div>
+            <div class="ul-hint">If it exists. Whatever state &mdash; even a rough doc.</div>
+          </div>
+          <label class="ul-cta" for="ul-file-brand-book">
+            <span class="ul-cta-empty">Drop files or click</span>
+            <span class="ul-cta-count" hidden></span>
+          </label>
           <span class="ul-status" aria-hidden="true"><span class="ul-check"></span></span>
+          <ul class="ul-files"></ul>
         </li>
 
-        <li class="ul-row">
+        <li class="ul-row" data-category="press-talks" data-num="04">
+          <input type="file" multiple class="ul-file" id="ul-file-press-talks" />
           <span class="ul-num">04</span>
-          <span class="ul-name">Press + talks</span>
-          <span class="ul-hint">Articles, podcasts, interviews, talks where the brand got to speak.</span>
+          <div class="ul-info">
+            <div class="ul-name">Press + talks</div>
+            <div class="ul-hint">Articles, podcasts, interviews, talks where the brand got to speak.</div>
+          </div>
+          <label class="ul-cta" for="ul-file-press-talks">
+            <span class="ul-cta-empty">Drop files or click</span>
+            <span class="ul-cta-count" hidden></span>
+          </label>
           <span class="ul-status" aria-hidden="true"><span class="ul-check"></span></span>
+          <ul class="ul-files"></ul>
         </li>
 
-        <li class="ul-row">
+        <li class="ul-row" data-category="creator-list" data-num="05">
+          <input type="file" multiple class="ul-file" id="ul-file-creator-list" />
           <span class="ul-num">05</span>
-          <span class="ul-name">Creator list</span>
-          <span class="ul-hint">Current ambassadors or press relationships. Dream list works too.</span>
+          <div class="ul-info">
+            <div class="ul-name">Creator list</div>
+            <div class="ul-hint">Current ambassadors or press relationships. Dream list works too.</div>
+          </div>
+          <label class="ul-cta" for="ul-file-creator-list">
+            <span class="ul-cta-empty">Drop files or click</span>
+            <span class="ul-cta-count" hidden></span>
+          </label>
           <span class="ul-status" aria-hidden="true"><span class="ul-check"></span></span>
+          <ul class="ul-files"></ul>
         </li>
 
-        <li class="ul-row">
+        <li class="ul-row" data-category="analytics" data-num="06">
+          <input type="file" multiple class="ul-file" id="ul-file-analytics" />
           <span class="ul-num">06</span>
-          <span class="ul-name">Analytics</span>
-          <span class="ul-hint">CSV or dashboard screenshot from your main platform.</span>
+          <div class="ul-info">
+            <div class="ul-name">Analytics</div>
+            <div class="ul-hint">CSV or dashboard screenshot from your main platform.</div>
+          </div>
+          <label class="ul-cta" for="ul-file-analytics">
+            <span class="ul-cta-empty">Drop files or click</span>
+            <span class="ul-cta-count" hidden></span>
+          </label>
           <span class="ul-status" aria-hidden="true"><span class="ul-check"></span></span>
+          <ul class="ul-files"></ul>
         </li>
 
       </ul>
+
+      <!-- Submit -->
+      <div class="ul-submit-bar">
+        <div class="ul-submit-msg" id="ul-submit-msg" role="status" aria-live="polite"></div>
+        <button type="button" class="ul-submit-btn" id="ul-submit-btn">
+          Send to OBSOLETE <span class="ul-submit-arrow">&rarr;</span>
+        </button>
+      </div>
+
+      <!-- Success overlay (hidden until submit succeeds) -->
+      <div class="ul-success" id="ul-success" hidden>
+        <div class="ul-success-mark">&check;</div>
+        <div class="ul-success-title">Received.</div>
+        <div class="ul-success-sub">
+          We&rsquo;ll be in touch within 24 hours to schedule your ENCODE session.<br/>
+          Everything you sent is safe with us.
+        </div>
+      </div>
 
     </div>
   </section>
@@ -1269,6 +1588,326 @@ main {
   </footer>
 
 </main>
+
+<!-- Supabase JS — client-side upload to Storefront project / ENCODE bucket -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function () {
+  const SUPABASE_URL = 'https://avqkkyeiwcivoaeglgdj.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_mLcv3rgMvHpfxax8ZsXVjg_7F8Jyal9';
+  const BUCKET = 'ENCODE';
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzldwre';
+  const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50 MB per file
+
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const CATEGORY_LABELS = {
+    'best-content':   'Your best content',
+    'customer-voice': 'Customer voice',
+    'brand-book':     'Brand book',
+    'press-talks':    'Press + talks',
+    'creator-list':   'Creator list',
+    'analytics':      'Analytics',
+  };
+
+  // Per-category state: array of { id, name, size, path, status: 'uploading'|'done'|'error', error? }
+  const state = {};
+  Object.keys(CATEGORY_LABELS).forEach(k => { state[k] = []; });
+
+  let submitting = false;
+  let submitted = false;
+
+  // --- helpers ---------------------------------------------------------
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+
+  const brandInput = $('#ul-brand');
+  const emailInput = $('#ul-email');
+  const submitBtn  = $('#ul-submit-btn');
+  const submitMsg  = $('#ul-submit-msg');
+  const successEl  = $('#ul-success');
+
+  const slugify = (s) => (s || '')
+    .toLowerCase()
+    .normalize('NFKD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60) || 'unknown';
+
+  const safeFilename = (name) => name.replace(/[^a-zA-Z0-9._-]+/g, '_').slice(0, 120);
+
+  const fmtSize = (bytes) => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  };
+
+  const isoStamp = () => new Date().toISOString().replace(/[:.]/g, '-');
+
+  const uuid = () =>
+    (crypto && crypto.randomUUID && crypto.randomUUID()) ||
+    'id-' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+
+  // --- render ----------------------------------------------------------
+  function renderRow(category) {
+    const row = $(`.ul-row[data-category="${category}"]`);
+    if (!row) return;
+
+    const files = state[category];
+    const hasUploading = files.some(f => f.status === 'uploading');
+    const hasDone = files.some(f => f.status === 'done');
+    const hasError = files.some(f => f.status === 'error');
+
+    row.classList.toggle('uploading', hasUploading);
+    row.classList.toggle('has-files', hasDone && !hasUploading);
+    row.classList.toggle('errored', hasError);
+
+    const cta = $('.ul-cta', row);
+    const ctaCount = $('.ul-cta-count', cta);
+    const doneCount = files.filter(f => f.status === 'done').length;
+
+    if (doneCount > 0) {
+      ctaCount.hidden = false;
+      ctaCount.textContent = `${doneCount} file${doneCount === 1 ? '' : 's'} · add more`;
+    } else {
+      ctaCount.hidden = true;
+    }
+
+    const list = $('.ul-files', row);
+    list.innerHTML = '';
+    files.forEach(f => {
+      const li = document.createElement('li');
+      li.className = 'ul-file-item ' + (f.status || 'done');
+      li.innerHTML = `
+        <span class="ul-file-item-name">${escapeHtml(f.name)}</span>
+        <span class="ul-file-item-size">${fmtSize(f.size)}</span>
+        <span class="ul-file-item-status">${f.status === 'uploading' ? '…' : f.status === 'error' ? (f.error || 'failed') : ''}</span>
+        ${f.status !== 'uploading' ? `<button type="button" class="ul-file-item-remove" data-id="${f.id}" aria-label="Remove">&times;</button>` : ''}
+      `;
+      list.appendChild(li);
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function renderAll() {
+    Object.keys(CATEGORY_LABELS).forEach(renderRow);
+  }
+
+  // --- upload ----------------------------------------------------------
+  async function uploadOne(category, file) {
+    if (file.size > MAX_FILE_BYTES) {
+      const item = { id: uuid(), name: file.name, size: file.size, status: 'error', error: 'too large (>50MB)' };
+      state[category].push(item);
+      renderRow(category);
+      return;
+    }
+
+    const brand = slugify(brandInput.value) || 'unknown-brand';
+    const path = `${brand}/${category}/${isoStamp()}-${uuid()}-${safeFilename(file.name)}`;
+
+    const item = {
+      id: uuid(),
+      name: file.name,
+      size: file.size,
+      path,
+      status: 'uploading',
+    };
+    state[category].push(item);
+    renderRow(category);
+
+    try {
+      const { data, error } = await sb.storage
+        .from(BUCKET)
+        .upload(path, file, { upsert: false, contentType: file.type || 'application/octet-stream' });
+
+      if (error) throw error;
+      item.status = 'done';
+      item.path = data?.path || path;
+    } catch (err) {
+      console.error('Upload failed', err);
+      item.status = 'error';
+      item.error = (err && err.message) ? err.message.toLowerCase() : 'upload failed';
+    }
+    renderRow(category);
+  }
+
+  function ingestFiles(category, fileList) {
+    if (!fileList || !fileList.length) return;
+    if (submitted) return;
+    Array.from(fileList).forEach(file => { uploadOne(category, file); });
+  }
+
+  // --- bind row events -------------------------------------------------
+  function bindRow(row) {
+    const category = row.dataset.category;
+    const input = $('.ul-file', row);
+    const cta = $('.ul-cta', row);
+
+    input.addEventListener('change', (e) => {
+      ingestFiles(category, e.target.files);
+      // reset so selecting the same file again still triggers change
+      e.target.value = '';
+    });
+
+    // Drag-and-drop on the whole row
+    ['dragenter', 'dragover'].forEach(evt => {
+      row.addEventListener(evt, (e) => {
+        e.preventDefault(); e.stopPropagation();
+        row.classList.add('dragover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(evt => {
+      row.addEventListener(evt, (e) => {
+        e.preventDefault(); e.stopPropagation();
+        if (evt === 'dragleave' && row.contains(e.relatedTarget)) return;
+        row.classList.remove('dragover');
+      });
+    });
+
+    row.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (!e.dataTransfer) return;
+      const files = e.dataTransfer.files;
+      ingestFiles(category, files);
+    });
+
+    // Click on the row (except on remove buttons or the file input itself) opens picker
+    row.addEventListener('click', (e) => {
+      if (e.target.closest('.ul-file-item-remove')) return;
+      if (e.target.closest('.ul-cta')) return; // label handles it
+      if (e.target === input) return;
+      input.click();
+    });
+
+    // Remove file
+    $('.ul-files', row).addEventListener('click', (e) => {
+      const btn = e.target.closest('.ul-file-item-remove');
+      if (!btn) return;
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      state[category] = state[category].filter(f => f.id !== id);
+      renderRow(category);
+    });
+  }
+
+  $$('.ul-row').forEach(bindRow);
+
+  // --- submit ----------------------------------------------------------
+  function setMsg(text, level) {
+    submitMsg.textContent = text || '';
+    submitMsg.classList.remove('error', 'warn');
+    if (level) submitMsg.classList.add(level);
+  }
+
+  function validate() {
+    const brand = brandInput.value.trim();
+    const email = emailInput.value.trim();
+    const identityBlock = $('.ul-identity');
+    identityBlock.classList.remove('has-error');
+
+    if (!brand || !email) {
+      identityBlock.classList.add('has-error');
+      setMsg('Add your brand name + email before sending.', 'error');
+      return null;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      identityBlock.classList.add('has-error');
+      setMsg('That email doesn’t look right. Double-check?', 'error');
+      return null;
+    }
+
+    const anyDone = Object.values(state).some(arr => arr.some(f => f.status === 'done'));
+    if (!anyDone) {
+      setMsg('Upload at least one file before sending.', 'warn');
+      return null;
+    }
+
+    const anyUploading = Object.values(state).some(arr => arr.some(f => f.status === 'uploading'));
+    if (anyUploading) {
+      setMsg('Hold on — still uploading…', 'warn');
+      return null;
+    }
+
+    return { brand, email };
+  }
+
+  async function submit() {
+    if (submitting || submitted) return;
+    const v = validate();
+    if (!v) return;
+
+    submitting = true;
+    submitBtn.disabled = true;
+    setMsg('Sending…');
+
+    const summary = {};
+    const flatList = [];
+    Object.keys(CATEGORY_LABELS).forEach(cat => {
+      const files = state[cat].filter(f => f.status === 'done');
+      if (files.length === 0) return;
+      summary[CATEGORY_LABELS[cat]] = files.map(f => ({ name: f.name, size: fmtSize(f.size), path: f.path }));
+      files.forEach(f => flatList.push(`[${CATEGORY_LABELS[cat]}] ${f.name} (${fmtSize(f.size)}) — ${f.path}`));
+    });
+
+    const payload = {
+      brand: v.brand,
+      email: v.email,
+      _subject: `OBSOLETE ENCODE upload — ${v.brand}`,
+      lead_source: 'encode-uploads',
+      bucket: BUCKET,
+      file_count: flatList.length,
+      files_summary: flatList.join('\n'),
+      files_by_category: summary,
+    };
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.errors?.[0]?.message || `HTTP ${res.status}`);
+      }
+
+      submitted = true;
+      $('#uploads-list').setAttribute('hidden', '');
+      $('.ul-identity').setAttribute('hidden', '');
+      $('.ul-submit-bar').setAttribute('hidden', '');
+      successEl.hidden = false;
+      successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (err) {
+      console.error(err);
+      setMsg('Couldn’t send the notification. Your files are uploaded, though — try again in a moment.', 'error');
+      submitBtn.disabled = false;
+    } finally {
+      submitting = false;
+    }
+  }
+
+  submitBtn.addEventListener('click', submit);
+
+  // Clear validation error styling when fields change
+  [brandInput, emailInput].forEach(el => {
+    el.addEventListener('input', () => {
+      $('.ul-identity').classList.remove('has-error');
+      if (submitMsg.classList.contains('error')) setMsg('');
+    });
+  });
+
+  renderAll();
+})();
+</script>
 
 </body>
 </html>
