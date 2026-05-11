@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Local working / strategy files — NEVER push to public repo
+CLAUDE.md
+BIZ MODEL.html
+RECON RULES.md
+ENCODE SESSION.html
+og-image.html
+api-recon-new.js
+
+# Drafts + dated backups
+*.backup-*.html
+*.with-edits-*.html
+*.draft.html
+
+# Editor / OS junk
+*.swp
+*~
+.vscode/
+.idea/
