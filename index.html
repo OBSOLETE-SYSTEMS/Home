@@ -14,19 +14,19 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OBSOLETE">
 <meta property="og:title" content="OBSOLETE — Self-Driving Marketing Departments">
-<meta property="og:description" content="Your marketing department can run itself. We build self-driving teams powered by custom AI intelligence. Designed to not be needed.">
+<meta property="og:description" content="Your marketing department, multiplied. We build self-driving teams that support marketing operators — they report to you. Designed to not be needed.">
 <meta property="og:url" content="https://weareobsolete.ai/">
 <meta property="og:image" content="https://weareobsolete.ai/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="OBSOLETE — Your marketing department can run itself.">
+<meta property="og:image:alt" content="OBSOLETE — Your marketing department, multiplied.">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="OBSOLETE — Self-Driving Marketing Departments">
-<meta name="twitter:description" content="Your marketing department can run itself. Designed to not be needed.">
+<meta name="twitter:description" content="Your marketing department, multiplied. Designed to not be needed.">
 <meta name="twitter:image" content="https://weareobsolete.ai/og-image.png">
-<meta name="twitter:image:alt" content="OBSOLETE — Your marketing department can run itself.">
+<meta name="twitter:image:alt" content="OBSOLETE — Your marketing department, multiplied.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -883,7 +883,8 @@ a:hover { text-decoration: underline; }
 
 .system-grid {
   display: grid;
-  grid-template-columns: 400px 1fr;
+  /* the three phases are the message; the log is ambient proof */
+  grid-template-columns: 1fr 1.1fr;
   gap: 0;
   background: var(--black);
   border: 1px solid var(--border);
@@ -899,7 +900,7 @@ a:hover { text-decoration: underline; }
 .phase-card {
   background: var(--card);
   border: none;
-  padding: 20px 24px;
+  padding: 30px 32px;
   text-align: left;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -948,9 +949,9 @@ a:hover { text-decoration: underline; }
 
 .phase-label {
   font-family: var(--font-display);
-  font-size: 32px;
+  font-size: clamp(34px, 3.2vw, 46px);
   letter-spacing: 0.04em;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   line-height: 1;
 }
 
@@ -959,10 +960,10 @@ a:hover { text-decoration: underline; }
 .phase-card[data-phase="compound"] .phase-label { color: var(--neon-green); }
 
 .phase-desc {
-  font-size: 13px;
+  font-size: 14.5px;
   font-weight: 400;
   color: var(--text);
-  line-height: 1.55;
+  line-height: 1.6;
   margin: 0 0 10px 0;
 }
 
@@ -3335,6 +3336,8 @@ a:hover { text-decoration: underline; }
   margin-bottom: 24px;
 }
 
+.coming-soon-title .yellow { color: var(--neon-yellow); }
+
 .coming-soon-body {
   font-size: 16px;
   font-weight: 300;
@@ -4133,40 +4136,6 @@ a:hover { text-decoration: underline; }
   letter-spacing: 0.04em;
 }
 
-.dept-leverage-line {
-  margin-top: 12px;
-  padding: 22px 28px;
-  border: 1px solid var(--neon-yellow);
-  background: rgba(232, 255, 0, 0.03);
-  font-family: var(--font-display);
-  font-size: clamp(20px, 2.4vw, 28px);
-  letter-spacing: 0.04em;
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  line-height: 1.1;
-}
-
-.dept-leverage-marker {
-  color: var(--neon-yellow);
-  font-size: 1em;
-  flex-shrink: 0;
-}
-
-.dept-leverage-strong {
-  color: var(--neon-yellow);
-}
-
-@media (max-width: 600px) {
-  .dept-leverage-line {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-    padding: 18px 20px;
-  }
-}
-
 /* ================================================================
    CONTACT MODAL — used by nav Contact link + Recon Complete CTA
    ================================================================ */
@@ -4589,9 +4558,8 @@ function Hero({ onStartRecon }) {
           <h1 className="hero-headline">
             YOUR<br/>
             MARKETING<br/>
-            <span className="outline">DEPARTMENT</span><br/>
-            CAN <span className="yellow">RUN</span><br/>
-            <span className="yellow">ITSELF.</span>
+            <span className="outline">DEPARTMENT</span>,<br/>
+            <span className="yellow">MULTIPLIED.</span>
           </h1>
 
           <p className="hero-subcopy">
@@ -5050,10 +5018,6 @@ function Departments() {
           <span className="dept-customize-marker">//</span>
           Every department is fully customizable and mapped to your business.
           <span className="dept-customize-end">Built once. Tuned forever.</span>
-        </div>
-        <div className="dept-leverage-line">
-          <span className="dept-leverage-marker">&rarr;</span>
-          Six departments. <span className="dept-leverage-strong">One operator: you.</span>
         </div>
       </div>
     </section>
@@ -6354,7 +6318,7 @@ function Proof() {
           </div>
           <div className="coming-soon-title">
             Our first deployments are live.<br/>
-            <span style={{ color: 'var(--neon-yellow)' }}>Receipts dropping soon.</span>
+            <span className="yellow">Receipts dropping soon.</span>
           </div>
           <div className="coming-soon-meta">
             <div className="coming-soon-meta-item">
