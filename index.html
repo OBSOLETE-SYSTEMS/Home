@@ -293,10 +293,10 @@ a:hover { text-decoration: underline; }
 /* --- Marquee --- */
 .marquee-bar {
   overflow: hidden;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--on-accent);
+  border-bottom: 1px solid var(--on-accent);
   padding: 14px 0;
-  background: var(--dark);
+  background: var(--neon-yellow);
 }
 
 .marquee-track {
@@ -310,13 +310,17 @@ a:hover { text-decoration: underline; }
 .marquee-track span {
   font-family: var(--font-mono);
   font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-dim);
+  color: var(--on-accent);
 }
 
+/* the stars can't be yellow-on-yellow; ink at half strength keeps them
+   as separators without competing with the words */
 .marquee-track .dot {
-  color: var(--accent-yellow);
+  color: var(--on-accent);
+  opacity: 0.45;
 }
 
 @keyframes marquee-scroll {
